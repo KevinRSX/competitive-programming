@@ -80,3 +80,71 @@ int main()
 
 ```
 
+# 2. 20190124 Floyd最短路径
+
+Floyd最短路径依托的是关系
+
+$dis[i][j] = min(dis[i][j], dis[i][k] + dis[k][j])$
+
+将邻接矩阵中每个点的最短路都遍历出来，复杂度为$O(n^3)$.
+
+模版例题 CityU126 (UVA567)
+
+```c++
+#include <cstdio>
+
+int g[21][21];
+
+int main()
+{
+  int n, kase = 1;
+  while (~scanf("%d", &n))
+  {
+    for (int i = 0; i < 21; i++)
+    {
+      for (int j = 0; j < 21; j++)
+      {
+        g[i][j] = 10000;
+      }
+    }
+    for (int i = 0; i < n; i++)
+    {
+      int tmp;
+      scanf("%d", &tmp);
+      g[1][tmp] = g[tmp][1] = 1;
+    }
+    for (int i = 2; i < 20; i++)
+    {
+      scanf("%d", &n);
+      for (int j = 0; j < n; j++)
+      {
+        int tmp;
+        scanf("%d", &tmp);
+        g[i][tmp] = g[tmp][i] = 1;
+      }
+    }
+
+    for (int k = 0; k <= 20; k++)
+      for (int i = 0; i <= 20; i++)
+        for (int j = 0; j <= 20; j++)
+          if (g[i][k] + g[k][j] < g[i][j])
+            g[i][j] = g[i][k] + g[k][j];
+
+    int T;
+    scanf("%d", &T);
+    printf("Test Set #%d\n", kase++);
+    while (T--)
+    {
+      int p1, p2;
+      scanf("%d%d", &p1, &p2);
+      printf("%2d to %2d: %d\n", p1, p2, g[p1][p2]);
+    }
+    printf("\n");
+  }
+}
+```
+
+利用dp的解释：[https://www.zhihu.com/question/30955032](https://www.zhihu.com/question/30955032)
+
+![floyd-explanation](floyd-explanation.png)
+
