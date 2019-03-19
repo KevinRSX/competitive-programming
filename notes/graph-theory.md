@@ -369,10 +369,99 @@ prim()
 
 
 
+## Kruskal's Algorithm
+
+Prim's Algorithm是"加点"算法，而Kruskal's Algorithm是"加边"算法。
+
+它的概念非常简单：每次选取权值最小的边，将边和边上的点添加到最小生成树中。然而，选取边的条件是该条边的两个顶点不可以同时已经在树中。
+
+实现：
+
+1. 用from，to， weight三个attribute来存储边
+2. 先把所有边由小至大sort一遍
+3. 使用并查集判断两点是否都在最小生成树中
+
+```c++
+// kruskal
+#include<iostream>
+#include<cstdio>
+#include<string.h>
+#include<algorithm>
+using namespace std;
+ 
+const int MAXN = 505;
+const int MAXM = 250005;
+int F[MAXN];	// union-find array
+ 
+struct Edge
+{
+    int u,v,w;
+}
+
+Edge edge[MAXM];
+ 
+int tol = 0;	// no. of deges
+ 
+void addedge(int u,int v,int w)
+{
+    edge[tol].u=u;
+    edge[tol].v=v;
+    edge[tol++].w=w;
+}
+ 
+bool cmp(Edge a,Edge b)		// sort edges according to weight
+{
+    return a.w<b.w;
+}
+ 
+int Find(int x)
+{
+    if(F[x] == -1)
+        return x;
+    else
+        return F[x] = Find(F[x]);
+}
+ 
+int Kruskal(int n)	// returns the total weight of MST, -1 if not connected
+{
+    memset(F,-1,sizeof(F));
+    sort(edge,edge + tol,cmp);
+    int cnt = 0;	// no. of edges added
+    int ans = 0;
+    for(int i=0;i<tol;i++)
+    {
+        int u=edge[i].u;
+        int v=edge[i].v;
+        int w=edge[i].w;
+        int t1=Find(u);
+        int t2=Find(v);
+        if(t1 != t2)
+        {
+            ans+=w;
+            F[t1]=t2;	// union t1 and t2
+            cnt++;
+        }
+        if(cnt == n-1)
+            break;
+    }
+    if(cnt < n-1)
+        return -1;	// not connected
+    else
+        return ans;
+}
+```
+
+
+
+
+
 # 来源和拓展阅读
 
 链式前向星：https://blog.csdn.net/acdreamers/article/details/16902023
 
 Bellman-Ford：http://www.wutianqi.com/blog/1912.html
 
+Kruskal：https://blog.csdn.net/algzjh/article/details/52312423
+
 挑战程序设计竞赛V2
+
