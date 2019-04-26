@@ -19,58 +19,59 @@ struct EdmondsKarp
   int a[maxn]; 	// minimum residual value from an augmenting path
   // can be used as vis[] array in bfs
   int p[maxn];	// parent node in an s-t path
+  
+  void init(int n)
+	{
+  	for (int i = 0; i < n; i++) G[i].clear();
+  	edges.clear();
+	}
+
+	void addEdge(int from, int to, int cap)
+	{
+  	edges.push_back(Edge(from, to, cap, 0));
+  	edges.push_back(Edge(to, from, 0, 0));
+  	m = edges.size();
+  	G[from].push_back(m - 2);
+  	G[to].push_back(m - 1);
+	}
+	
+	int MaxFlow(int s, int t)
+	{
+  	int flow = 0;
+  	for (;;)
+  	{
+    	memset(a, 0, sizeof(a));
+    	queue<int> Q;
+    	Q.push(s);
+    	a[s] = INF;
+    	while (!Q.empty())
+    	{
+      	int x = Q.front();
+      	Q.pop();
+      	for (int i = 0; i < G[x].size(); i++)
+      	{
+        	Edge &e = edges[G[x][i]];
+        	if (!a[e.to] && e.cap > e.flow)
+        	{
+          	p[e.to] = G[x][i];
+          	a[e.to] = min(a[x], e.cap - e.flow);
+          	Q.push(e.to);
+        	}
+        }
+      	if (a[t]) break;	// augmenting path found
+      }
+    	if (!a[t]) break;		// no more augmenting path, maxflow reached
+    	for (int u = t; u != s; u = edges[p[u]].from)
+    	{
+      	edges[p[u]].flow += a[t];
+      	edges[p[u] ^ 1].flow -= a[t];
+    	}
+    	flow += a[t];
+  	}
+  	return flow;
+	}
 };
 
-void init(int n)
-{
-  for (int i = 0; i < n; i++) G[i].clear();
-  edges.clear();
-}
-
-void addEdge(int from, int to, int cap)
-{
-  edges.push_back(Edge(from, to, cap, 0));
-  edges.push_back(Edge(to, from, 0, 0));
-  m = edges.size();
-  G[from].push_back(m - 2);
-  G[to].push_back(m - 1);
-}
-
-int MaxFlow(int s, int t)
-{
-  int flow = 0;
-  for (;;)
-  {
-    memset(a, 0, sizeof(a));
-    queue<int> Q;
-    Q.push(s);
-    a[s] = INF;
-    while (!Q.empty())
-    {
-      int x = Q.front();
-      Q.pop();
-      for (int i = 0; i < G[x].size(); i++)
-      {
-        Edge &e = edges[G[x][i]];
-        if (!a[e.to] && e.cap > e.flow)
-        {
-          p[e.to] = G[x][i];
-          a[e.to] = min(a[x], e.cap - e.flow);
-          Q.push(e.to);
-        }
-      }
-      if (a[t]) break;	// augmenting path found
-    }
-    if (!a[t]) break;		// no more augmenting path, maxflow reached
-    for (int u = t; u != s; u = edges[p[u]].from)
-    {
-      edges[p[u]].flow += a[t];
-      edges[p[u] ^ 1].flow -= a[t];
-    }
-    flow += a[t];
-  }
-  return flow;
-}
 ```
 
 
@@ -167,8 +168,6 @@ int MincostMaxflow(int s, int t, long long &cost)
 
 
 # 二分图匹配
-
-
 
 ## 匈牙利算法
 
