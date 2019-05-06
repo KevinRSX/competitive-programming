@@ -1,4 +1,4 @@
-#define EPS 1e-10
+#define EPS 1e-8
 #define equals(a, b) (fabs((a) - (b)) < EPS)
 #include <cstdio>
 #include <cmath>
@@ -7,6 +7,7 @@
 #include <utility>
 #include <cassert>
 using namespace std;
+#define INF 0x3f3f3f3f
 
 // definition of turning
 static const int COUNTER_CLOCKWISE = 1;
@@ -246,4 +247,25 @@ Polygon andrewScan(Polygon s)
   reverse(l.begin(), l.end());
   for (int i = u.size() - 2; i >= 1; i--) l.push_back(u[i]);
   return l;
+}
+
+int main()
+{
+  #ifdef DEBUG
+  freopen("in.txt", "r", stdin);
+  #endif
+  double d;
+  while (~scanf("%lf", &d) && fabs(d) > EPS)
+  {
+    double px, py, vx, vy;
+    double travel;
+    scanf("%lf%lf%lf%lf", &px, &py, &vx, &vy);
+    Vector v1 = Vector(px, py), v2 = Vector(vx, vy);
+    double c = cross(v1, v2);
+    if (fabs(c) >= EPS) travel = INF;
+    else if (dot(v1, v2) >= 0) travel = 2.0 - v1.abs();
+    else travel = v1.abs();
+    if (d > travel) printf("possible\n");
+    else printf("impossible\n"); 
+  }
 }

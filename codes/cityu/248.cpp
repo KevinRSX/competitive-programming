@@ -247,3 +247,38 @@ Polygon andrewScan(Polygon s)
   for (int i = u.size() - 2; i >= 1; i--) l.push_back(u[i]);
   return l;
 }
+
+int main()
+{
+  #ifdef DEBUG
+  freopen("in.txt", "r", stdin);
+  freopen("out.txt", "w", stdout);
+  #endif
+  int n;
+  double xstart, ystart, xend, yend, xleft, ytop, xright, ybottom;
+  scanf("%d", &n);
+  while (n--)
+  {
+    scanf("%lf%lf%lf%lf%lf%lf%lf%lf", &xstart, &ystart, &xend, &yend, &xleft, &ytop, &xright, &ybottom);
+    Segment judge = Segment(xstart, ystart, xend, yend);
+    Polygon s;
+    s.push_back(Point(xleft, ybottom));
+    s.push_back(Point(xleft, ytop));
+    s.push_back(Point(xright, ytop));
+    s.push_back(Point(xright, ybottom));
+    Segment a = Segment(xleft, ybottom, xright, ybottom);
+    Segment b = Segment(xleft, ybottom, xleft, ytop);
+    Segment c = Segment(xright, ytop, xleft, ytop);
+    Segment d = Segment(xright, ytop, xright, ybottom);
+    if (contains(s, judge.p1) && contains(s, judge.p2))
+    {
+      printf("T\n");
+    }
+    else if (intersect(judge, a) || intersect(judge, b) || intersect (judge, c) ||
+        intersect(judge, d))
+    {
+      printf("T\n");
+    }
+    else printf("F\n");
+  }
+}

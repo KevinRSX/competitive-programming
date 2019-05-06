@@ -228,7 +228,7 @@ Polygon andrewScan(Polygon s)
 
   for (int i = 2; i < s.size(); i++)
   {
-    for (int n = u.size(); n >= 2 && ccw(u[n - 2], u[n - 1], s[i]) != CLOCKWISE; n--)
+    for (int n = u.size(); n >= 2 && ccw(u[n - 2], u[n - 1], s[i]) == COUNTER_CLOCKWISE; n--)
     {
       u.pop_back();
     }
@@ -237,7 +237,7 @@ Polygon andrewScan(Polygon s)
 
   for (int i = s.size() - 3; i >= 0; i--)
   {
-    for (int n = l.size(); n >= 2 && ccw(l[n - 2], l[n - 1], s[i]) != CLOCKWISE; n--)
+    for (int n = l.size(); n >= 2 && ccw(l[n - 2], l[n - 1], s[i]) == COUNTER_CLOCKWISE; n--)
     {
       l.pop_back();
     }
@@ -246,4 +246,43 @@ Polygon andrewScan(Polygon s)
   reverse(l.begin(), l.end());
   for (int i = u.size() - 2; i >= 1; i--) l.push_back(u[i]);
   return l;
+}
+
+int main()
+{
+  #ifdef DEBUG
+  freopen("in.txt", "r", stdin);
+  freopen("out.txt", "w", stdout);
+  #endif
+  int T;
+  scanf("%d", &T);
+  for (int k = 0; k < T; k++)
+  {
+    if (k == 0) printf("%d\n", T);
+    int n;
+    scanf("%d", &n);
+    Polygon s;
+    Point p;
+    for (int i = 0; i < n; i++)
+    {
+      scanf("%lf %lf", &p.x, &p.y);
+      if (i < n - 1) s.push_back(p);
+    }
+    int tmp;
+    if (k < T - 1) scanf("%d", &tmp);
+    Polygon ch = andrewScan(s);
+    int start = 0;
+    for (int i = 0; i < ch.size(); i++)
+    {
+      if (ch[i].y < ch[start].y) start = i;
+    }
+    printf("%lu\n", ch.size() + 1);
+    for (int i = 0; i < ch.size(); i++)
+    {
+      printf("%.0lf %.0lf\n", ch[(i + start) % ch.size()].x, ch[(i + start) % ch.size()].y);
+    }
+    printf("%.0lf %.0lf\n", ch[(start) % ch.size()].x, ch[(start) % ch.size()].y);
+    if (k < T - 1) printf("-1\n");
+  }
+  return 0;
 }

@@ -247,3 +247,37 @@ Polygon andrewScan(Polygon s)
   for (int i = u.size() - 2; i >= 1; i--) l.push_back(u[i]);
   return l;
 }
+
+double area(Polygon s)
+{
+  double retval = 0.0;
+  for (int i = 0; i < s.size(); i++)
+  {
+    Vector v1 = s[i], v2 = s[(i + 1) % s.size()];
+    retval += 0.5 * cross(v1, v2);
+  }
+  return retval >= 0 ? retval : -retval;
+}
+
+int main()
+{
+  #ifdef DEBUG
+  freopen("in.txt", "r", stdin);
+  #endif
+  int n, kase = 0;
+  while (~scanf("%d", &n) && n)
+  {
+    Polygon s;
+    double x, y;
+    for (int i = 0; i < n; i++)
+    {
+      scanf("%lf%lf", &x, &y);
+      s.push_back(Point(x, y));
+    }
+    Polygon ch = andrewScan(s);
+    double tile = area(s), container = area(ch);
+    printf("Tile #%d\n", ++kase);
+    printf("Wasted Space = %.2lf %%\n\n", ((container - tile) / container) * 100.0);
+  }
+  return 0;
+}
