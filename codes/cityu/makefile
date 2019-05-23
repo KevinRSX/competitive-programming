@@ -1,2 +1,2 @@
-a.out: 556.cpp
-	g++ 556.cpp -D DEBUG
+a.out: 677.cpp
+	g++ 677.cpp -D DEBUG
