@@ -21,3 +21,11 @@ void getprime(int n)
 }
 ```
 
+
+
+## Euler's Totient Function
+
+$$
+\phi(n)=n\underset{p|n}{\Pi}(1-1/p)
+$$
+

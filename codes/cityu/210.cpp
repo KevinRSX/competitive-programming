@@ -252,7 +252,6 @@ int main()
 {
   #ifdef DEBUG
   freopen("in.txt", "r", stdin);
-  freopen("out.txt", "w", stdout);
   #endif
   int T;
   scanf("%d", &T);
