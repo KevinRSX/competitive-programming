@@ -1,2 +1,2 @@
-a.out: uva10790.cpp
-	g++ uva10790.cpp -D DEBUG
+a.out: uva11554.cpp
+	g++ uva11554.cpp -D DEBUG

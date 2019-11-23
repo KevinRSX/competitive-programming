@@ -29,3 +29,27 @@ $$
 \phi(n)=n\underset{p|n}{\Pi}(1-1/p)
 $$
 
+
+
+## Factorial
+
+```c++
+LL fac(int k) {
+  LL sum = 1;
+  for(int i = 2; i <= k; ++i)
+    sum *= i;
+  return sum;
+}
+
+int ncr(int n, int r) {
+  if(r == 0 || n == r) return 1;
+  r = min(r, n-r);
+
+  LL nf = fac(n);
+  LL rf = fac(r);
+  LL nrf = fac(n - r);
+  return nf/(rf * nrf);
+}
+// LL is long long
+```
+
